@@ -21,18 +21,45 @@
   <h3>First to 5 points wins!</h3>
 
   <div>
-    <button>Rock</button>
-    <button>Paper</button>
-    <button>Scissors</button>
+    <button class="rock">Rock</button>
+    <button class="paper">Paper</button>
+    <button class="scissors">Scissors</button>
   </div>
 
-  <h4>You: Rock</h4>
-  <h4>Computer: Paper</h4>
+  <h4 class="player-choice">You: </h4>
+  <h4 class="computer-choice">Computer: </h4>
 
-  <h4>Your Points: 0</h4>
-  <h4>Computer Points: 0</h4>
+  <h4 class="player-points">Your Points: 0</h4>
+  <h4 class="computer-points">Computer Points: 0</h4>
   
 <script>
+
+var playerChoice = document.querySelector('.player-choice');
+var computerChoice = document.querySelector('.computer-choice');
+
+var playerPnts = 0;
+var computerPnts = 0;
+
+const playerPntsStr = document.querySelector('.player-points');
+const computerPntsStr = document.querySelector('.computer-points');
+
+const rockBtn = document.querySelector('.rock');
+rockBtn.addEventListener('click', () => {
+  var result = playRound('rock', getComputerChoice());
+  computeWinner(result);
+});
+
+const paperBtn = document.querySelector('.paper');
+paperBtn.addEventListener('click', () => {
+  var result = playRound('paper', getComputerChoice());
+  computeWinner(result);
+});
+
+const scissorsBtn = document.querySelector('.scissors');
+scissorsBtn.addEventListener('click', () => {
+  var result = playRound('scissors', getComputerChoice());
+  computeWinner(result);
+});
 
 // Randomly return rock, paper, or scissors
 function getComputerChoice() {
@@ -48,6 +75,10 @@ function getComputerChoice() {
 
 // Function determines winner
 function playRound(playerSelection, computerSelection) {
+
+  playerChoice.textContent = "You: " + playerSelection;
+  computerChoice.textContent = "Computer: " + computerSelection;
+
   if (playerSelection === 'rock') {
     if (computerSelection === 'paper')
       return 'You Lose!';
@@ -72,47 +103,40 @@ function playRound(playerSelection, computerSelection) {
   }
 }
 
-// Game ends after 5 rounds of results that are not draws. 
-function game() {
-  let rounds = 0;
-  let winCount = 0;
-  let loseCount = 0;
-  while (rounds < 5) {
-    // Get user's choice 
-    let playerSelection;
-    playerSelection = prompt("Enter rock, paper, or scissors");
-    playerSelection = playerSelection.toLowerCase();
-
-    let computerSelection = getComputerChoice();
-
-    console.log(`Player: ${playerSelection}\nComputer: ${computerSelection}`);
-
-    let result = playRound(playerSelection, computerSelection);
-
-    switch (result) {
-      case 'You Lose!':
-        console.log(result);
-        loseCount++;
-        rounds++;
-        break;
-      case 'You Win!':
-        console.log(result);
-        winCount++;
-        rounds++;
-        break;
-      case 'Draw!':
-        console.log(result);
-        break;
-    }
+function computeWinner(result) {
+  switch (result) {
+    case 'You Lose!':
+      incrementComputerPnts();
+      break;
+    case 'You Win!':
+      incrementPlayerPnts();
+      break;
+    case 'Draw!':
+      
+      break;
   }
-
-  console.log(`Rounds won: ${winCount}\nRounds lost: ${loseCount}`);
-  if (winCount > loseCount) {
-    console.log('You won the game!');
-  } else {
-    console.log('The computer won the game!');
+  
+  if (playerPnts === 5 || computerPnts === 5) {
+    console.log(`Player points = ${playerPnts}`);
+    console.log("Computer Points" + computerPnts);
+    if (playerPnts > computerPnts)
+      alert("You Win!");
+    else
+      alert("Computer Wins :(");
+    playerPnts = computerPnts = -1;
+    incrementComputerPnts();
+    incrementPlayerPnts();
   }
+}
 
+function incrementPlayerPnts() {
+  playerPnts++;
+  playerPntsStr.textContent = "Your Points: " + playerPnts;
+}
+
+function incrementComputerPnts() {
+  computerPnts++;
+  computerPntsStr.textContent = "Computer Points: " + computerPnts;
 }
 
 </script>
